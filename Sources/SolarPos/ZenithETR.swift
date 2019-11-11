@@ -2,7 +2,7 @@ import Foundation
 
 // ETR solar zenith angle (ETR == "Extraterrestrial" or "top of atmosphere")
 // Iqbal, M.  1983.  An Introduction to Solar Radiation.
-// Academic Press, NY., page 15
+// Academic Press, NY., page 15, Equation 1.5.1
 public struct ZenithETR {
     // Zenith angle
     public let zenith: Double

@@ -1,0 +1,11 @@
+# https://docs.travis-ci.com/user/languages/objective-c says:
+# "Objective-C/Swift builds are not available on the Linux environments."
+
+os:
+  - osx
+
+osx_image:
+  - xcode11.2
+
+script:
+  - swift test --parallel

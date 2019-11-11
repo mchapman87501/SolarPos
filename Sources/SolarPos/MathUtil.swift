@@ -1,17 +1,17 @@
-public func muModulo(_ v: Double, radix: Double = 360.0) -> Double {
-    let whole = radix * Double(Int(v / radix))
-    let fract = v - whole
+public func muModulo(_ value: Double, radix: Double = 360.0) -> Double {
+    let whole = radix * Double(Int(value / radix))
+    let fract = value - whole
     let result = (fract >= 0) ? fract : (fract + radix)
     return result
 }
 
-public func oneRev(_ v: Double) -> Double {
-    return muModulo(v)
+public func oneRev(_ value: Double) -> Double {
+    return muModulo(value)
 }
 
 public func longitudeLimit(_ degrees: Double) -> Double {
     let dRev = muModulo(degrees)
-    if (dRev > 180.0) {
+    if dRev > 180.0 {
         return dRev - 360.0
     }
     return dRev
@@ -27,12 +27,12 @@ public func rads(_ degrees: Double) -> Double {
 }
 
 // Generate successive integer powers of term, starting from 0
-fileprivate class Powers{
+private class Powers {
     let term: Double
     private var currValue = 1.0
-    
-    init(_ t: Double) {
-        term = t
+
+    init(_ termIn: Double) {
+        term = termIn
     }
 
     func next() -> Double {
@@ -40,6 +40,8 @@ fileprivate class Powers{
         return currValue
     }
 }
+
+// swiftlint:disable identifier_name
 
 public func poly(coeffs: [Double], x: Double) -> Double {
     let powers = Powers(x)

@@ -1,6 +1,5 @@
 import Foundation
 
-
 // Calculates Heliocentric Position coordinates using data from
 // Table A.4.2 of "Solar Position Algorithm for Solar Radiation Applications",
 // Ibrahim Reda and Afshin Andreas, NREL, Revised January 2008
@@ -17,12 +16,14 @@ import Foundation
 // Astronomy and Astrophysics, 1988, vol. 202, p309-p315, is available on this
 // site for review.   It explains the mathematical and technical foundations of
 // the theory in its full, graphic, mathematical horror. " :) :)
-internal struct HelioPositionCalc{
+
+// swiftlint:disable identifier_name type_body_length
+internal struct HelioPositionCalc {
     struct EPTRec {
-        let a: Double // Amplitude
-        let f: Double // Frequency
-        let p: Double // Phase
-        
+        let a: Double  // Amplitude
+        let f: Double  // Frequency
+        let p: Double  // Phase
+
         func value(jme: Double) -> Double {
             return a * cos(f + p * jme)
         }
@@ -154,7 +155,7 @@ internal struct HelioPositionCalc{
         EPTRec(a: 2.0, f: 4.38, p: 5223.69),
         EPTRec(a: 2.0, f: 3.75, p: 0.98)
     ]
-    
+
     static let l3 = [
         EPTRec(a: 289.0, f: 5.844, p: 6283.076),
         EPTRec(a: 35.0, f: 0.0, p: 0.0),
@@ -174,7 +175,7 @@ internal struct HelioPositionCalc{
     static let l5 = [
         EPTRec(a: 1.0, f: 3.14, p: 0.0)
     ]
-    
+
     static let b0 = [
             EPTRec(a: 280.0, f: 3.199, p: 84334.662),
             EPTRec(a: 102.0, f: 5.422, p: 5507.553),
@@ -274,16 +275,14 @@ internal struct HelioPositionCalc{
     // Bretagnon and Simon. Planetary Programs and Tables from -4000 to +2800
     // (Wilmann-Bell, Richmond; 1986)
     internal static func getLValue(
-        _ jme: Double, _ params:[EPTRec]) -> Double
-    {
-        let terms = params.map { $0.value(jme:jme) }
+        _ jme: Double, _ params: [EPTRec]) -> Double {
+        let terms = params.map { $0.value(jme: jme) }
         let result = terms.reduce(0.0) { $0 + $1 }
         return result
     }
-    
+
     private static func polynomial(
-        jme: Double, tables: [[EPTRec]]) -> Double
-    {
+        jme: Double, tables: [[EPTRec]]) -> Double {
         let coeffs = tables.map { getLValue(jme, $0) }
         let unscaled = poly(coeffs: coeffs, x: jme)
         return unscaled / 1.0e8
@@ -292,19 +291,18 @@ internal struct HelioPositionCalc{
      * Get heliocentric longitude, degrees
      */
     private static let longPolyTables = [l0, l1, l2, l3, l4, l5]
-    
+
     static func longitude(jme: Double) -> Double {
         return oneRev(degrees(polynomial(jme: jme, tables: longPolyTables)))
     }
-    
+
     static func latitude(jme: Double) -> Double {
         let modulated = oneRev(degrees(polynomial(jme: jme, tables: [b0, b1])))
         return (modulated <= 180.0) ? modulated : modulated - 360.0
     }
-    
+
     // Get Earth radius vector in Astronomical Units (AU)
     static func earthRadiusVector(jme: Double) -> Double {
         return polynomial(jme: jme, tables: [r0, r1, r2, r3, r4])
     }
 }
-

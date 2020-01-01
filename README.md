@@ -6,3 +6,5 @@ For most uses the main entity will be SolarPos, which calculates geocentric and 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/mchapman87501/SolarPos.svg?branch=master)](https://travis-ci.org/mchapman87501/SolarPos)
+
+
